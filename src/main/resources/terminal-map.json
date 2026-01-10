@@ -1,0 +1,78 @@
+{
+  "nodes": [
+    { "id": "1", "label": "West Entrance", "description": "Public area - Main terminal west entrance", "floor": 1 },
+    { "id": "2", "label": "Check-in A", "description": "Public area - Check-in counters zone A", "floor": 1 },
+    { "id": "3", "label": "Security", "description": "SECURITY CHECKPOINT - Boarding pass required beyond this point", "floor": 1 },
+    { "id": "4", "label": "Food Court", "description": "Airside - Post-security food court", "floor": 1 },
+    { "id": "5", "label": "Duty Free", "description": "Airside - Duty-free shopping area", "floor": 1 },
+    { "id": "6", "label": "Central Hub", "description": "Airside - Central terminal hub", "floor": 1 },
+    { "id": "7", "label": "Passport Control", "description": "PASSPORT CONTROL - International departures", "floor": 1 },
+    { "id": "8", "label": "Intl Terminal", "description": "Restricted - International terminal (passport required)", "floor": 1 },
+
+    { "id": "9",  "label": "Gate A1", "description": "Airside - Domestic departure gate A1", "floor": 1 },
+    { "id": "10", "label": "Gate A2", "description": "Airside - Domestic departure gate A2", "floor": 1 },
+    { "id": "11", "label": "Gate A3", "description": "Airside - Domestic departure gate A3", "floor": 1 },
+    { "id": "12", "label": "Gate A4", "description": "Airside - Domestic departure gate A4", "floor": 1 },
+    { "id": "13", "label": "Gate A5", "description": "Airside - Domestic departure gate A5", "floor": 1 },
+    { "id": "14", "label": "Concourse A", "description": "Airside - Concourse A junction (domestic)", "floor": 1 },
+    { "id": "15", "label": "Lounge A", "description": "Airside - Business class lounge (membership required)", "floor": 1 },
+
+    { "id": "16", "label": "Gate B1", "description": "Restricted - International gate B1 (passport required)", "floor": 1 },
+    { "id": "17", "label": "Gate B2", "description": "Restricted - International gate B2 (passport required)", "floor": 1 },
+    { "id": "18", "label": "Gate B3", "description": "Restricted - International gate B3 (passport required)", "floor": 1 },
+    { "id": "19", "label": "Gate B4", "description": "Restricted - International gate B4 (passport required)", "floor": 1 },
+    { "id": "20", "label": "Gate B5", "description": "Restricted - International gate B5 (passport required)", "floor": 1 },
+    { "id": "21", "label": "Concourse B", "description": "Restricted - Concourse B junction (international)", "floor": 1 },
+    { "id": "22", "label": "Gate B6", "description": "Restricted - International gate B6 (passport required)", "floor": 1 },
+    { "id": "23", "label": "Intl Lounge", "description": "Restricted - International first class lounge", "floor": 1 },
+
+    { "id": "24", "label": "Restrooms A", "description": "Airside - Restroom area near Concourse A", "floor": 1 },
+    { "id": "25", "label": "Connector", "description": "Airside - Cross-concourse connector corridor", "floor": 1 },
+
+    { "id": "F2-1", "label": "Upper Food Court", "description": "Airside - Second floor food court", "floor": 2 },
+    { "id": "F2-2", "label": "Sky Lounge", "description": "Airside - Premium sky lounge (membership required)", "floor": 2 },
+    { "id": "F2-3", "label": "Observation Deck", "description": "Public area - Observation deck (no boarding pass needed)", "floor": 2 }
+  ],
+  "edges": [
+    { "from": "1", "to": "2", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "2", "to": "3", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "3", "to": "4", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "4", "to": "5", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "5", "to": "6", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "6", "to": "7", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "7", "to": "8", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+
+    { "from": "15", "to": "14", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "14", "to": "13", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "13", "to": "12", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "12", "to": "11", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "11", "to": "10", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "10", "to": "9",  "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+
+    { "from": "23", "to": "22", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "22", "to": "21", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "21", "to": "20", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "20", "to": "19", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "19", "to": "18", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "18", "to": "17", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "17", "to": "16", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+
+    { "from": "14", "to": "2",  "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "21", "to": "6",  "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+
+    { "from": "9",  "to": "16", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "10", "to": "17", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": false },
+    { "from": "11", "to": "18", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "12", "to": "19", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "13", "to": "25", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "20", "to": "25", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "14", "to": "24", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "14", "to": "21", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+
+    { "from": "4", "to": "F2-1", "cost": 1, "bidirectional": true, "type": "ELEVATOR" },
+    { "from": "4", "to": "F2-1", "cost": 2, "bidirectional": true, "type": "STAIRS" },
+    { "from": "F2-1", "to": "F2-2", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "F2-2", "to": "F2-3", "cost": 1, "bidirectional": true, "type": "CORRIDOR" },
+    { "from": "6", "to": "F2-2", "cost": 1, "bidirectional": true, "type": "ESCALATOR" }
+  ]
+}
