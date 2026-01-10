@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -192,7 +191,9 @@ class DijkstraRouterTest {
         ));
         adj.put("C", List.of(new GraphEdge("B", 1, EdgeType.CORRIDOR, true)));
 
-        return new Graph(adj, Map.of("A", true, "B", true, "C", true), emptyMap());
+        return new Graph(adj,
+                Map.of("A", true, "B", true, "C", true),
+                Map.of("A", 1, "B", 1, "C", 1));
     }
 
     /**
@@ -216,7 +217,9 @@ class DijkstraRouterTest {
                 new GraphEdge("B", 1, EdgeType.CORRIDOR, true)
         ));
 
-        return new Graph(adj, Map.of("A", true, "B", true, "D", true), emptyMap());
+        return new Graph(adj,
+                Map.of("A", true, "B", true, "D", true),
+                Map.of("A", 1, "B", 1, "D", 1));
     }
 
     /**
@@ -240,7 +243,9 @@ class DijkstraRouterTest {
                 new GraphEdge("B", 1, EdgeType.CORRIDOR, true)
         ));
 
-        return new Graph(adj, Map.of("A", true, "B", true, "C", true), emptyMap());
+        return new Graph(adj,
+                Map.of("A", true, "B", true, "C", true),
+                Map.of("A", 1, "B", 1, "C", 1));
     }
 
     /**
@@ -251,7 +256,9 @@ class DijkstraRouterTest {
         adj.put("A", List.of(new GraphEdge("B", 1, EdgeType.CORRIDOR, false)));
         adj.put("B", List.of(new GraphEdge("A", 1, EdgeType.CORRIDOR, false)));
 
-        return new Graph(adj, Map.of("A", true, "B", true), emptyMap());
+        return new Graph(adj,
+                Map.of("A", true, "B", true),
+                Map.of("A", 1, "B", 1));
     }
 
     /**
@@ -279,7 +286,9 @@ class DijkstraRouterTest {
                 new GraphEdge("C", 1, EdgeType.CORRIDOR, true)
         ));
 
-        return new Graph(adj, Map.of("A", true, "B", false, "C", true, "D", true), emptyMap());
+        return new Graph(adj,
+                Map.of("A", true, "B", false, "C", true, "D", true),
+                Map.of("A", 1, "B", 1, "C", 1, "D", 1));
     }
 
     /**
@@ -291,6 +300,8 @@ class DijkstraRouterTest {
         adj.put("B", List.of(new GraphEdge("A", 1, EdgeType.CORRIDOR, true)));
         adj.put("Z", List.of());
 
-        return new Graph(adj, Map.of("A", true, "B", true, "Z", true), emptyMap());
+        return new Graph(adj,
+                Map.of("A", true, "B", true, "Z", true),
+                Map.of("A", 1, "B", 1, "Z", 1));
     }
 }

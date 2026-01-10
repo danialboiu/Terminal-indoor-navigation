@@ -47,6 +47,7 @@ public final class GraphBuilder {
         Set<String> nodeIds = new HashSet<>();
         Map<String, Boolean> nodeEnabled = new HashMap<>();
         Map<String, Integer> nodeFloors = new HashMap<>();
+
         for (Node n : map.nodes) {
             if (n == null || isBlank(n.id)) {
                 throw new IllegalArgumentException("Node with missing or empty id.");
@@ -54,10 +55,16 @@ public final class GraphBuilder {
             if (!nodeIds.add(n.id)) {
                 throw new IllegalArgumentException("Duplicate node id detected: " + n.id);
             }
-            // Default enabled to true if not specified
-            nodeEnabled.put(n.id, n.enabled == null ? true : n.enabled);
-            // Default floor to 1 if not specified
-            nodeFloors.put(n.id, n.floor == null ? 1 : n.floor);
+
+            if (n.enabled == null) {
+                throw new IllegalArgumentException("Node.enabled missing for node: " + n.id);
+            }
+            if (n.floor == null) {
+                throw new IllegalArgumentException("Node.floor missing for node: " + n.id);
+            }
+
+            nodeEnabled.put(n.id, n.enabled);
+            nodeFloors.put(n.id, n.floor);
         }
 
         // --- Initialize adjacency list for all nodes ---
@@ -81,29 +88,26 @@ public final class GraphBuilder {
                 throw new IllegalArgumentException("Edge references unknown destination node: " + e.to);
             }
 
-            // --- Validate mandatory edge attributes ---
             if (e.cost == null || e.cost <= 0) {
-                throw new IllegalArgumentException(
-                        "Invalid edge cost for connection: " + e.from + " -> " + e.to);
+                throw new IllegalArgumentException("Invalid edge cost for connection: " + e.from + " -> " + e.to);
             }
             if (e.bidirectional == null) {
-                throw new IllegalArgumentException(
-                        "Missing directionality for edge: " + e.from + " -> " + e.to);
+                throw new IllegalArgumentException("Missing directionality for edge: " + e.from + " -> " + e.to);
             }
             if (e.type == null) {
-                throw new IllegalArgumentException(
-                        "Missing edge type for connection: " + e.from + " -> " + e.to);
+                throw new IllegalArgumentException("Missing edge type for connection: " + e.from + " -> " + e.to);
+            }
+            if (e.enabled == null) {
+                throw new IllegalArgumentException("Edge.enabled missing for edge: " + e.from + " -> " + e.to);
             }
 
-            // Default enabled to true if not specified
-            boolean edgeEnabled = e.enabled == null ? true : e.enabled;
+            if (!e.enabled) {
+                continue; // closed/out-of-service segment
+            }
 
-            // --- Add forward edge ---
-            adj.get(e.from).add(new GraphEdge(e.to, e.cost, e.type, edgeEnabled));
-
-            // --- Add reverse edge if bidirectional ---
+            adj.get(e.from).add(new GraphEdge(e.to, e.cost, e.type, true));
             if (e.bidirectional) {
-                adj.get(e.to).add(new GraphEdge(e.from, e.cost, e.type, edgeEnabled));
+                adj.get(e.to).add(new GraphEdge(e.from, e.cost, e.type, true));
             }
         }
 

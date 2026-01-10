@@ -57,32 +57,14 @@ class GraphBuilderTest {
         }
 
         @Test
-        @DisplayName("defaults enabled to true when not specified")
-        void defaultsEnabledToTrue() {
-            TerminalMap map = createValidTerminalMap();
-            Graph graph = builder.build(map);
-
-            assertTrue(graph.isNodeEnabled("A"));
-            assertTrue(graph.isNodeEnabled("B"));
-
-            // Check edge enabled
-            List<GraphEdge> edges = graph.edgesFrom("A");
-            assertTrue(edges.stream().allMatch(GraphEdge::enabled));
-        }
-
-        @Test
-        @DisplayName("respects enabled=false on edges")
+        @DisplayName("respects enabled=false on edges (skips disabled edges)")
         void respectsDisabledEdges() {
             TerminalMap map = createMapWithDisabledEdge();
             Graph graph = builder.build(map);
 
+            // Disabled edges are skipped entirely in the new implementation
             List<GraphEdge> edges = graph.edgesFrom("A");
-            GraphEdge disabledEdge = edges.stream()
-                    .filter(e -> e.to().equals("B"))
-                    .findFirst()
-                    .orElseThrow();
-
-            assertFalse(disabledEdge.enabled());
+            assertTrue(edges.isEmpty());
         }
 
         @Test
@@ -93,16 +75,6 @@ class GraphBuilderTest {
 
             assertTrue(graph.isNodeEnabled("A"));
             assertFalse(graph.isNodeEnabled("B"));
-        }
-
-        @Test
-        @DisplayName("defaults floor to 1 when not specified")
-        void defaultsFloorToOne() {
-            TerminalMap map = createValidTerminalMap();
-            Graph graph = builder.build(map);
-
-            assertEquals(1, graph.getNodeFloor("A"));
-            assertEquals(1, graph.getNodeFloor("B"));
         }
 
         @Test
@@ -260,6 +232,8 @@ class GraphBuilderTest {
         node.id = id;
         node.label = "Node " + id;
         node.description = "Description for " + id;
+        node.enabled = true;
+        node.floor = 1;
         return node;
     }
 
@@ -282,6 +256,7 @@ class GraphBuilderTest {
         edge.cost = 1;
         edge.bidirectional = true;
         edge.type = EdgeType.CORRIDOR;
+        edge.enabled = true;
         return edge;
     }
 
