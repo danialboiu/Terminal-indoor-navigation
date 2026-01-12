@@ -102,13 +102,10 @@ public final class GraphBuilder {
                 throw new IllegalArgumentException("Edge.enabled missing for edge: " + e.from + " -> " + e.to);
             }
 
-            if (!e.enabled) {
-                continue; // closed/out-of-service segment
-            }
-
-            adj.get(e.from).add(new GraphEdge(e.to, e.cost, e.type, true));
+            // Keep disabled edges in graph - filtered at routing time
+            adj.get(e.from).add(new GraphEdge(e.to, e.cost, e.type, e.enabled));
             if (e.bidirectional) {
-                adj.get(e.to).add(new GraphEdge(e.from, e.cost, e.type, true));
+                adj.get(e.to).add(new GraphEdge(e.from, e.cost, e.type, e.enabled));
             }
         }
 

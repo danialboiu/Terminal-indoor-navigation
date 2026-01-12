@@ -62,7 +62,7 @@ public class RouteController {
         return switch (profile) {
             case PASSENGER -> "Standard passenger - can use all paths";
             case PARENT_WITH_STROLLER -> "Parent with stroller - cannot use stairs or escalators";
-            case ELDERLY -> "Elderly passenger - can use all paths including stairs";
+            case ELDERLY -> "Elderly passenger - cannot use stairs";
             case WHEELCHAIR_USER -> "Wheelchair user - cannot use stairs or escalators";
         };
     }

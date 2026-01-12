@@ -57,17 +57,6 @@ class GraphBuilderTest {
         }
 
         @Test
-        @DisplayName("respects enabled=false on edges (skips disabled edges)")
-        void respectsDisabledEdges() {
-            TerminalMap map = createMapWithDisabledEdge();
-            Graph graph = builder.build(map);
-
-            // Disabled edges are skipped entirely in the new implementation
-            List<GraphEdge> edges = graph.edgesFrom("A");
-            assertTrue(edges.isEmpty());
-        }
-
-        @Test
         @DisplayName("respects enabled=false on nodes")
         void respectsDisabledNodes() {
             TerminalMap map = createMapWithDisabledNode();

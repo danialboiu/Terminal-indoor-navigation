@@ -23,7 +23,7 @@
     { "id": "F0_POSTSEC_B", "label": "Post-Security Area B", "description": "Airside area immediately after Security B (leads to passport control corridor).", "floor": 0, "enabled": true },
 
     { "id": "F0_DUTY_FREE_A", "label": "Duty Free A", "description": "Duty Free area near domestic gates 50–57.", "floor": 0, "enabled": true },
-    { "id": "F0_PASSPORT_CTRL", "label": "Passport Control", "description": "Passport control connecting domestic airside to the international concourse corridor.", "floor": 0, "enabled": true },
+    { "id": "F0_PASSPORT_CTRL", "label": "Passport Control", "description": "Passport control connecting domestic airside to the international concourse corridor.", "floor": 0, "enabled": false },
 
     { "id": "F0_GATES_56_57", "label": "Gates 56–57", "description": "Domestic gates cluster 56–57.", "floor": 0, "enabled": true },
     { "id": "F0_GATES_54_55", "label": "Gates 54–55", "description": "Domestic gates cluster 54–55.", "floor": 0, "enabled": true },
