@@ -1,4 +1,4 @@
-package model;
+package com.terminal.navigation.model;
 
 import java.util.List;
 
@@ -17,4 +17,3 @@ public class TerminalMap {
 
     public TerminalMap() {}
 }
-

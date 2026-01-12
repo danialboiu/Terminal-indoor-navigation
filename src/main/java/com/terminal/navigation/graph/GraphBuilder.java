@@ -1,8 +1,9 @@
-package graph;
+package com.terminal.navigation.graph;
 
-import model.EdgeDef;
-import model.Node;
-import model.TerminalMap;
+
+import com.terminal.navigation.model.EdgeDef;
+import com.terminal.navigation.model.Node;
+import com.terminal.navigation.model.TerminalMap;
 
 import java.util.*;
 
@@ -46,7 +47,7 @@ public final class GraphBuilder {
         // --- Validate nodes and ensure uniqueness ---
         Set<String> nodeIds = new HashSet<>();
         Map<String, Boolean> nodeEnabled = new HashMap<>();
-        Map<String, Integer> nodeFloors = new HashMap<>();
+        Map<String, Double> nodeFloors = new HashMap<>();
 
         for (Node n : map.nodes) {
             if (n == null || isBlank(n.id)) {

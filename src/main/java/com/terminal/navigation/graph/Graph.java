@@ -1,4 +1,4 @@
-package graph;
+package com.terminal.navigation.graph;
 
 import java.util.*;
 
@@ -10,11 +10,11 @@ public final class Graph {
 
     private final Map<String, List<GraphEdge>> adj;
     private final Map<String, Boolean> nodeEnabled;
-    private final Map<String, Integer> nodeFloors;
+    private final Map<String, Double> nodeFloors;
 
     public Graph(Map<String, List<GraphEdge>> adj,
                  Map<String, Boolean> nodeEnabled,
-                 Map<String, Integer> nodeFloors) {
+                 Map<String, Double> nodeFloors) {
 
         if (adj == null || adj.isEmpty()) {
             throw new IllegalArgumentException("Graph adjacency map must not be null or empty.");
@@ -82,9 +82,9 @@ public final class Graph {
         return enabled;
     }
 
-    /** Returns the floor of the given node (defaults to 1 if not specified). */
-    public int getNodeFloor(String id) {
-        Integer floor = nodeFloors.get(id);
+    /** Returns the floor of the given node. Supports negative values and decimals (e.g., -1, 1.5). */
+    public double getNodeFloor(String id) {
+        Double floor = nodeFloors.get(id);
         if (floor == null) {
             throw new IllegalArgumentException("Unknown node id (floor): " + id);
         }

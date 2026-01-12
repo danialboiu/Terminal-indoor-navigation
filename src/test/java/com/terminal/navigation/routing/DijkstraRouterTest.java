@@ -1,8 +1,8 @@
-package routing;
+package com.terminal.navigation.routing;
 
-import graph.Graph;
-import graph.GraphEdge;
-import model.EdgeType;
+import com.terminal.navigation.graph.Graph;
+import com.terminal.navigation.graph.GraphEdge;
+import com.terminal.navigation.model.EdgeType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,7 +38,7 @@ class DijkstraRouterTest {
             assertEquals("A", result.from());
             assertEquals("B", result.to());
             assertEquals(List.of("A", "B"), result.path());
-            assertEquals(1, result.totalCost());
+            assertEquals(1.0, result.totalCost());
         }
 
         @Test
@@ -48,7 +48,7 @@ class DijkstraRouterTest {
             RouteResult result = router.shortestPath(graph, "A", "C");
 
             assertEquals(List.of("A", "B", "C"), result.path());
-            assertEquals(2, result.totalCost());
+            assertEquals(2.0, result.totalCost());
         }
 
         @Test
@@ -58,7 +58,7 @@ class DijkstraRouterTest {
             RouteResult result = router.shortestPath(graph, "A", "A");
 
             assertEquals(List.of("A"), result.path());
-            assertEquals(0, result.totalCost());
+            assertEquals(0.0, result.totalCost());
         }
 
         @Test
@@ -72,7 +72,7 @@ class DijkstraRouterTest {
 
             // Should take A -> B -> D (cost 2) instead of A -> D (cost 10)
             assertEquals(List.of("A", "B", "D"), result.path());
-            assertEquals(2, result.totalCost());
+            assertEquals(2.0, result.totalCost());
         }
     }
 
@@ -88,7 +88,7 @@ class DijkstraRouterTest {
 
             // Direct A->C is disabled, must go A->B->C
             assertEquals(List.of("A", "B", "C"), result.path());
-            assertEquals(2, result.totalCost());
+            assertEquals(2.0, result.totalCost());
         }
 
         @Test
@@ -184,16 +184,16 @@ class DijkstraRouterTest {
      */
     private Graph buildSimpleGraph() {
         Map<String, List<GraphEdge>> adj = new HashMap<>();
-        adj.put("A", List.of(new GraphEdge("B", 1, EdgeType.CORRIDOR, true)));
+        adj.put("A", List.of(new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true)));
         adj.put("B", List.of(
-                new GraphEdge("A", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("C", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("C", 1.0, EdgeType.CORRIDOR, true)
         ));
-        adj.put("C", List.of(new GraphEdge("B", 1, EdgeType.CORRIDOR, true)));
+        adj.put("C", List.of(new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true)));
 
         return new Graph(adj,
                 Map.of("A", true, "B", true, "C", true),
-                Map.of("A", 1, "B", 1, "C", 1));
+                Map.of("A", 1.0, "B", 1.0, "C", 1.0));
     }
 
     /**
@@ -205,21 +205,21 @@ class DijkstraRouterTest {
     private Graph buildGraphWithAlternativePaths() {
         Map<String, List<GraphEdge>> adj = new HashMap<>();
         adj.put("A", List.of(
-                new GraphEdge("B", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("D", 10, EdgeType.CORRIDOR, true)
+                new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("D", 10.0, EdgeType.CORRIDOR, true)
         ));
         adj.put("B", List.of(
-                new GraphEdge("A", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("D", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("D", 1.0, EdgeType.CORRIDOR, true)
         ));
         adj.put("D", List.of(
-                new GraphEdge("A", 10, EdgeType.CORRIDOR, true),
-                new GraphEdge("B", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 10.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true)
         ));
 
         return new Graph(adj,
                 Map.of("A", true, "B", true, "D", true),
-                Map.of("A", 1, "B", 1, "D", 1));
+                Map.of("A", 1.0, "B", 1.0, "D", 1.0));
     }
 
     /**
@@ -231,21 +231,21 @@ class DijkstraRouterTest {
     private Graph buildGraphWithDisabledEdge() {
         Map<String, List<GraphEdge>> adj = new HashMap<>();
         adj.put("A", List.of(
-                new GraphEdge("B", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("C", 1, EdgeType.CORRIDOR, false)  // disabled
+                new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("C", 1.0, EdgeType.CORRIDOR, false)  // disabled
         ));
         adj.put("B", List.of(
-                new GraphEdge("A", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("C", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("C", 1.0, EdgeType.CORRIDOR, true)
         ));
         adj.put("C", List.of(
-                new GraphEdge("A", 1, EdgeType.CORRIDOR, false),  // disabled
-                new GraphEdge("B", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 1.0, EdgeType.CORRIDOR, false),  // disabled
+                new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true)
         ));
 
         return new Graph(adj,
                 Map.of("A", true, "B", true, "C", true),
-                Map.of("A", 1, "B", 1, "C", 1));
+                Map.of("A", 1.0, "B", 1.0, "C", 1.0));
     }
 
     /**
@@ -253,12 +253,12 @@ class DijkstraRouterTest {
      */
     private Graph buildGraphWithOnlyDisabledRoute() {
         Map<String, List<GraphEdge>> adj = new HashMap<>();
-        adj.put("A", List.of(new GraphEdge("B", 1, EdgeType.CORRIDOR, false)));
-        adj.put("B", List.of(new GraphEdge("A", 1, EdgeType.CORRIDOR, false)));
+        adj.put("A", List.of(new GraphEdge("B", 1.0, EdgeType.CORRIDOR, false)));
+        adj.put("B", List.of(new GraphEdge("A", 1.0, EdgeType.CORRIDOR, false)));
 
         return new Graph(adj,
                 Map.of("A", true, "B", true),
-                Map.of("A", 1, "B", 1));
+                Map.of("A", 1.0, "B", 1.0));
     }
 
     /**
@@ -270,25 +270,25 @@ class DijkstraRouterTest {
     private Graph buildGraphWithDisabledNode() {
         Map<String, List<GraphEdge>> adj = new HashMap<>();
         adj.put("A", List.of(
-                new GraphEdge("B", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("C", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("C", 1.0, EdgeType.CORRIDOR, true)
         ));
         adj.put("B", List.of(
-                new GraphEdge("A", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("D", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("D", 1.0, EdgeType.CORRIDOR, true)
         ));
         adj.put("C", List.of(
-                new GraphEdge("A", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("D", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("A", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("D", 1.0, EdgeType.CORRIDOR, true)
         ));
         adj.put("D", List.of(
-                new GraphEdge("B", 1, EdgeType.CORRIDOR, true),
-                new GraphEdge("C", 1, EdgeType.CORRIDOR, true)
+                new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true),
+                new GraphEdge("C", 1.0, EdgeType.CORRIDOR, true)
         ));
 
         return new Graph(adj,
                 Map.of("A", true, "B", false, "C", true, "D", true),
-                Map.of("A", 1, "B", 1, "C", 1, "D", 1));
+                Map.of("A", 1.0, "B", 1.0, "C", 1.0, "D", 1.0));
     }
 
     /**
@@ -296,12 +296,12 @@ class DijkstraRouterTest {
      */
     private Graph buildDisconnectedGraph() {
         Map<String, List<GraphEdge>> adj = new HashMap<>();
-        adj.put("A", List.of(new GraphEdge("B", 1, EdgeType.CORRIDOR, true)));
-        adj.put("B", List.of(new GraphEdge("A", 1, EdgeType.CORRIDOR, true)));
+        adj.put("A", List.of(new GraphEdge("B", 1.0, EdgeType.CORRIDOR, true)));
+        adj.put("B", List.of(new GraphEdge("A", 1.0, EdgeType.CORRIDOR, true)));
         adj.put("Z", List.of());
 
         return new Graph(adj,
                 Map.of("A", true, "B", true, "Z", true),
-                Map.of("A", 1, "B", 1, "Z", 1));
+                Map.of("A", 1.0, "B", 1.0, "Z", 1.0));
     }
 }

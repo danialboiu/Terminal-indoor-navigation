@@ -1,4 +1,4 @@
-package model;
+package com.terminal.navigation.model;
 
 /**
  * A location point in the terminal graph.
@@ -9,7 +9,7 @@ public class Node {
     public String label;
     public String description;
     public Boolean enabled;
-    public Integer floor;
+    public Double floor;
 
     public Node() {}
 

@@ -1,4 +1,4 @@
-package model;
+package com.terminal.navigation.model;
 
 public enum EdgeType {
     CORRIDOR,

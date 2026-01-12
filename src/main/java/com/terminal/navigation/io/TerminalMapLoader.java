@@ -1,7 +1,7 @@
-package io;
+package com.terminal.navigation.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.TerminalMap;
+import com.terminal.navigation.model.TerminalMap;
 
 import java.io.InputStream;
 

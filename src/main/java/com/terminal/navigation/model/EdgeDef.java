@@ -1,4 +1,4 @@
-package model;
+package com.terminal.navigation.model;
 
 /**
  * JSON-defined connection between two nodes in the terminal graph.
@@ -9,8 +9,8 @@ public class EdgeDef {
     public String from;
     public String to;
 
-    /** Cost value. */
-    public Integer cost;
+    /** Cost value (supports decimals). */
+    public Double cost;
 
     /** If true, adds edges in both directions; otherwise only from -> to. */
     public Boolean bidirectional;
@@ -24,7 +24,7 @@ public class EdgeDef {
 
     @Override
     public String toString() {
-        return "EdgeDef{%s -> %s, cost=%d, type=%s, bidirectional=%s}"
+        return "EdgeDef{%s -> %s, cost=%.2f, type=%s, bidirectional=%s}"
                 .formatted(from, to, cost, type, bidirectional);
     }
 }

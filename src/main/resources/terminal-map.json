@@ -1,78 +1,261 @@
 {
   "nodes": [
-    { "id": "1", "label": "West Entrance", "description": "Public area - Main terminal west entrance", "floor": 1, "enabled": true },
-    { "id": "2", "label": "Check-in A", "description": "Public area - Check-in counters zone A", "floor": 1, "enabled": true },
-    { "id": "3", "label": "Security", "description": "SECURITY CHECKPOINT - Boarding pass required beyond this point", "floor": 1, "enabled": true },
-    { "id": "4", "label": "Food Court", "description": "Airside - Post-security food court", "floor": 1, "enabled": true },
-    { "id": "5", "label": "Duty Free", "description": "Airside - Duty-free shopping area", "floor": 1, "enabled": true },
-    { "id": "6", "label": "Central Hub", "description": "Airside - Central terminal hub", "floor": 1, "enabled": true },
-    { "id": "7", "label": "Passport Control", "description": "PASSPORT CONTROL - International departures", "floor": 1, "enabled": true },
-    { "id": "8", "label": "Intl Terminal", "description": "Restricted - International terminal (passport required)", "floor": 1, "enabled": true },
+    { "id": "F0_ENT_A", "label": "Entrance A", "description": "Ground floor entrance A.", "floor": 0, "enabled": true },
+    { "id": "F0_ENT_B", "label": "Entrance B", "description": "Ground floor entrance B.", "floor": 0, "enabled": true },
+    { "id": "F0_ENT_C", "label": "Entrance C", "description": "Ground floor entrance C.", "floor": 0, "enabled": true },
+    { "id": "F0_ENT_D", "label": "Entrance D", "description": "Ground floor entrance D.", "floor": 0, "enabled": true },
 
-    { "id": "9",  "label": "Gate A1", "description": "Airside - Domestic departure gate A1", "floor": 1, "enabled": true },
-    { "id": "10", "label": "Gate A2", "description": "Airside - Domestic departure gate A2", "floor": 1, "enabled": true },
-    { "id": "11", "label": "Gate A3", "description": "Airside - Domestic departure gate A3", "floor": 1, "enabled": true },
-    { "id": "12", "label": "Gate A4", "description": "Airside - Domestic departure gate A4", "floor": 1, "enabled": true },
-    { "id": "13", "label": "Gate A5", "description": "Airside - Domestic departure gate A5", "floor": 1, "enabled": true },
-    { "id": "14", "label": "Concourse A", "description": "Airside - Concourse A junction (domestic)", "floor": 1, "enabled": true },
-    { "id": "15", "label": "Lounge A", "description": "Airside - Business class lounge (membership required)", "floor": 1, "enabled": true },
+    { "id": "BUS_STATION", "label": "Bus Station", "description": "Bus station outside terminal.", "floor": 0, "enabled": true },
 
-    { "id": "16", "label": "Gate B1", "description": "Restricted - International gate B1 (passport required)", "floor": 1, "enabled": true },
-    { "id": "17", "label": "Gate B2", "description": "Restricted - International gate B2 (passport required)", "floor": 1, "enabled": true },
-    { "id": "18", "label": "Gate B3", "description": "Restricted - International gate B3 (passport required)", "floor": 1, "enabled": true },
-    { "id": "19", "label": "Gate B4", "description": "Restricted - International gate B4 (passport required)", "floor": 1, "enabled": true },
-    { "id": "20", "label": "Gate B5", "description": "Restricted - International gate B5 (passport required)", "floor": 1, "enabled": true },
-    { "id": "21", "label": "Concourse B", "description": "Restricted - Concourse B junction (international)", "floor": 1, "enabled": true },
-    { "id": "22", "label": "Gate B6", "description": "Restricted - International gate B6 (passport required)", "floor": 1, "enabled": true },
-    { "id": "23", "label": "Intl Lounge", "description": "Restricted - International first class lounge", "floor": 1, "enabled": true },
+    { "id": "F0_CHECKIN_01_10", "label": "Check-in 1–10", "description": "Check-in counters range 1–10 (closer to Entrance A).", "floor": 0, "enabled": true },
+    { "id": "F0_CHECKIN_11_30", "label": "Check-in 11–30", "description": "Check-in counters range 11–30.", "floor": 0, "enabled": true },
+    { "id": "F0_CHECKIN_31_50", "label": "Check-in 31–50", "description": "Check-in counters range 31–50 (closest to Entrance B).", "floor": 0, "enabled": true },
+    { "id": "F0_CHECKIN_51_60", "label": "Check-in 51–60", "description": "Check-in counters range 51–60 (closest to Entrance C).", "floor": 0, "enabled": true },
+    { "id": "F0_CHECKIN_61_80", "label": "Check-in 61–80", "description": "Check-in counters range 61–80 (closest to Entrance C).", "floor": 0, "enabled": true },
+    { "id": "F0_CHECKIN_81_100", "label": "Check-in 81–100", "description": "Check-in counters range 81–100 (closest to Entrance D).", "floor": 0, "enabled": true },
 
-    { "id": "24", "label": "Restrooms A", "description": "Airside - Restroom area near Concourse A", "floor": 1, "enabled": true },
-    { "id": "25", "label": "Connector", "description": "Airside - Cross-concourse connector corridor", "floor": 1, "enabled": true },
+    { "id": "F0_ASSISTANCE", "label": "Assistance", "description": "Assistance point (front-to-front with Check-in 81–100), close to entrance D.", "floor": 0, "enabled": true },
 
-    { "id": "F2-1", "label": "Upper Food Court", "description": "Airside - Second floor food court", "floor": 2, "enabled": true },
-    { "id": "F2-2", "label": "Sky Lounge", "description": "Airside - Premium sky lounge (membership required)", "floor": 2, "enabled": true },
-    { "id": "F2-3", "label": "Observation Deck", "description": "Public area - Observation deck (no boarding pass needed)", "floor": 2, "enabled": true }
+    { "id": "F0_SECURITY_A", "label": "Security A", "description": "Security checkpoint A (one-way to airside).", "floor": 0, "enabled": true },
+    { "id": "F0_SECURITY_B", "label": "Security B", "description": "Security checkpoint B (one-way to airside).", "floor": 0, "enabled": true },
+
+    { "id": "F0_POSTSEC_A", "label": "Post-Security Area A", "description": "Airside area immediately after Security A.", "floor": 0, "enabled": true },
+    { "id": "F0_POSTSEC_B", "label": "Post-Security Area B", "description": "Airside area immediately after Security B (leads to passport control corridor).", "floor": 0, "enabled": true },
+
+    { "id": "F0_DUTY_FREE_A", "label": "Duty Free A", "description": "Duty Free area near domestic gates 50–57.", "floor": 0, "enabled": true },
+    { "id": "F0_PASSPORT_CTRL", "label": "Passport Control", "description": "Passport control connecting domestic airside to the international concourse corridor.", "floor": 0, "enabled": true },
+
+    { "id": "F0_GATES_56_57", "label": "Gates 56–57", "description": "Domestic gates cluster 56–57.", "floor": 0, "enabled": true },
+    { "id": "F0_GATES_54_55", "label": "Gates 54–55", "description": "Domestic gates cluster 54–55.", "floor": 0, "enabled": true },
+    { "id": "F0_GATES_52_53", "label": "Gates 52–53", "description": "Domestic gates cluster 52–53.", "floor": 0, "enabled": true },
+    { "id": "F0_GATES_50_51", "label": "Gates 50–51", "description": "Domestic gates cluster 50–51.", "floor": 0, "enabled": true },
+
+    { "id": "F0_HALLWAY_W1", "label": "International Corridor (Segment 1)", "description": "Long corridor after Passport Control leading toward the international concourse.", "floor": 0, "enabled": true },
+
+    { "id": "F0_DUTY_FREE_B", "label": "Duty Free B", "description": "Duty Free area along the corridor after Passport Control (adjacent to Duty Free C).", "floor": 0, "enabled": true },
+    { "id": "F0_DUTY_FREE_C", "label": "Duty Free C", "description": "Duty Free area along the corridor after Passport Control (adjacent to Duty Free B).", "floor": 0, "enabled": true },
+    { "id": "F0_TOILET_A", "label": "Toilet A", "description": "Toilet area near Duty Free B/C and gates 1–15 junction.", "floor": 0, "enabled": true },
+
+    { "id": "F0_CAFE_A", "label": "Café A", "description": "Café A on the Level 0 concourse ring.", "floor": 0, "enabled": true },
+    { "id": "F0_CAFE_B", "label": "Café B", "description": "Café B on the Level 0 concourse ring.", "floor": 0, "enabled": true },
+
+    { "id": "F0_ENTRANCE_MAIN_CONCOURSE", "label": "Main Concourse Junction", "description": "Airside junction on Level 0 connecting gates 1–15 and vertical connectors.", "floor": 0, "enabled": true },
+    { "id": "B1_ENTRANCE_DOWN_CONCOURSE", "label": "Lower Concourse Junction", "description": "Lower concourse junction on Level -1 connecting gates 20–39 and the food court.", "floor": -1, "enabled": true },
+
+    { "id": "F0_ESCALATOR_E_DOWN", "label": "Escalator E (Level 0)", "description": "Escalator E landing on Level 0 (connects to Level 1).", "floor": 0, "enabled": true },
+    { "id": "F1_ESCALATOR_E_UP", "label": "Escalator E (Level 1)", "description": "Escalator E landing on Level 1 (connects to Level 0).", "floor": 1, "enabled": true },
+
+    { "id": "F0_ESCALATOR_D_DOWN", "label": "Escalator D (Level 0)", "description": "Escalator D landing on Level 0 (connects to Level 1).", "floor": 0, "enabled": true },
+    { "id": "F1_ESCALATOR_D_UP", "label": "Escalator D (Level 1)", "description": "Escalator D landing on Level 1 (connects to Level 0).", "floor": 1, "enabled": true },
+
+    { "id": "F0_ESCALATOR_B_UP", "label": "Escalator B (Level 0)", "description": "Escalator B landing on Level 0 (connects to Level -1).", "floor": 0, "enabled": true },
+    { "id": "B1_ESCALATOR_B_DOWN", "label": "Escalator B (Level -1)", "description": "Escalator B landing on Level -1 (connects to Level 0).", "floor": -1, "enabled": true },
+
+    { "id": "F0_ESCALATOR_C_UP", "label": "Escalator C (Level 0)", "description": "Escalator C landing on Level 0 (connects to Level -1).", "floor": 0, "enabled": true },
+    { "id": "B1_ESCALATOR_C_DOWN", "label": "Escalator C (Level -1)", "description": "Escalator C landing on Level -1 (connects to Level 0).", "floor": -1, "enabled": true },
+
+    { "id": "B1_STAIRS_A_DOWN", "label": "Stairs A (Level -1)", "description": "Stairs A landing on Level -1 (connects to Level 0).", "floor": -1, "enabled": true },
+    { "id": "F0_STAIRS_A_UP", "label": "Stairs A (Level 0)", "description": "Stairs A landing on Level 0 (connects to Level -1).", "floor": 0, "enabled": true },
+
+    { "id": "F0_ESCALATOR_F_DOWN", "label": "Escalator F (Level 0)", "description": "Escalator F landing on Level 0 (connects to Level 1).", "floor": 0, "enabled": true },
+    { "id": "F1_ESCALATOR_F_UP", "label": "Escalator F (Level 1)", "description": "Escalator F landing on Level 1 (connects to Level 0).", "floor": 1, "enabled": true },
+
+    { "id": "F0_ESCALATOR_H_DOWN", "label": "Escalator H (Level 0)", "description": "Escalator H landing on Level 0 (connects to Level 1).", "floor": 0, "enabled": true },
+    { "id": "F1_ESCALATOR_H_UP", "label": "Escalator H (Level 1)", "description": "Escalator H landing on Level 1 (connects to Level 0).", "floor": 1, "enabled": true },
+
+    { "id": "F0_RESTAURANT_A", "label": "Restaurant A", "description": "Restaurant A on Level 0 concourse ring.", "floor": 0, "enabled": true },
+    { "id": "B1_RESTAURANT_B", "label": "Restaurant B", "description": "Restaurant B in the lower concourse (Level -1) near the food court zone.", "floor": -1, "enabled": true },
+    { "id": "B1_RESTAURANT_C", "label": "Restaurant C", "description": "Restaurant C in the lower concourse (Level -1) near gates 28/29.", "floor": -1, "enabled": true },
+    { "id": "B1_RESTAURANT_D", "label": "Restaurant D", "description": "Restaurant D in the lower concourse (Level -1) near gates 24/25.", "floor": -1, "enabled": true },
+    { "id": "B1_RESTAURANT_E", "label": "Restaurant E", "description": "Restaurant E in the lower concourse (Level -1) near the connector landing.", "floor": -1, "enabled": true },
+
+    { "id": "F1_BUSINESS_LOUNGE_A", "label": "Business Lounge A", "description": "Business lounge area on Level 1.", "floor": 1, "enabled": true },
+    { "id": "F1_BUSINESS_LOUNGE_B", "label": "Business Lounge B", "description": "Business lounge area on Level 1.", "floor": 1, "enabled": true },
+    { "id": "F1_VIP_LOUNGE", "label": "VIP Lounge", "description": "VIP lounge on Level 1.", "floor": 1, "enabled": true },
+
+    { "id": "B1_FOOD_COURT", "label": "Food Court", "description": "Food court in the lower concourse (Level -1).", "floor": -1, "enabled": true },
+    { "id": "B1_TOILET_B", "label": "Toilet B", "description": "Toilet area in the lower concourse (Level -1) near gates 30/31.", "floor": -1, "enabled": true },
+
+    { "id": "F0_GATE_1", "label": "Gate 1", "description": "Gate 1 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_2", "label": "Gate 2", "description": "Gate 2 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_3", "label": "Gate 3", "description": "Gate 3 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_4", "label": "Gate 4", "description": "Gate 4 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_5", "label": "Gate 5", "description": "Gate 5 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_6", "label": "Gate 6", "description": "Gate 6 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_9", "label": "Gate 9", "description": "Gate 9 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_10", "label": "Gate 10", "description": "Gate 10 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_11", "label": "Gate 11", "description": "Gate 11 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_12", "label": "Gate 12", "description": "Gate 12 (Level 0).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_13", "label": "Gate 13", "description": "Gate 13 (Level 0, near concourse junction).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_14", "label": "Gate 14", "description": "Gate 14 (Level 0, near concourse junction).", "floor": 0, "enabled": true },
+    { "id": "F0_GATE_15", "label": "Gate 15", "description": "Gate 15 (Level 0, near corridor from passport control).", "floor": 0, "enabled": true },
+
+    { "id": "B1_GATES_7_8", "label": "Gates 7–8", "description": "Gate pair 7/8 served via the concourse ring.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_20_21", "label": "Gates 20–21", "description": "Gate pair 20/21.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_22_23", "label": "Gates 22–23", "description": "Gate pair 22/23.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_24_25", "label": "Gates 24–25", "description": "Gate pair 24/25.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_26_27", "label": "Gates 26–27", "description": "Gate pair 26/27.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_28_29", "label": "Gates 28–29", "description": "Gate pair 28/29.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_30_31", "label": "Gates 30–31", "description": "Gate pair 30/31.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_32_33", "label": "Gates 32–33", "description": "Gate pair 32/33.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_34_35", "label": "Gates 34–35", "description": "Gate pair 34/35.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_36_37", "label": "Gates 36–37", "description": "Gate pair 36/37.", "floor": -1, "enabled": true },
+    { "id": "B1_GATES_38_39", "label": "Gates 38–39", "description": "Gate pair 38/39.", "floor": -1, "enabled": true }
   ],
   "edges": [
-    { "from": "1", "to": "2", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "2", "to": "3", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "3", "to": "4", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "4", "to": "5", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "5", "to": "6", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "6", "to": "7", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "7", "to": "8", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "BUS_STATION", "to": "F0_ENT_C", "cost": 4.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "BUS_STATION", "to": "F0_ENT_B", "cost": 5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "BUS_STATION", "to": "F0_ENT_D", "cost": 8, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "BUS_STATION", "to": "F0_ENT_A", "cost": 10, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
 
-    { "from": "15", "to": "14", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "14", "to": "13", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "13", "to": "12", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "12", "to": "11", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "11", "to": "10", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "10", "to": "9",  "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_A", "to": "F0_CHECKIN_01_10", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_A", "to": "F0_CHECKIN_11_30", "cost": 4.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
 
-    { "from": "23", "to": "22", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "22", "to": "21", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "21", "to": "20", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "20", "to": "19", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "19", "to": "18", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "18", "to": "17", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "17", "to": "16", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_B", "to": "F0_CHECKIN_31_50", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_B", "to": "F0_CHECKIN_11_30", "cost": 4.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
 
-    { "from": "14", "to": "2",  "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "21", "to": "6",  "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_C", "to": "F0_CHECKIN_51_60", "cost": 6, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_C", "to": "F0_CHECKIN_61_80", "cost": 4.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
 
-    { "from": "9",  "to": "16", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "10", "to": "17", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": false },
-    { "from": "11", "to": "18", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "12", "to": "19", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "13", "to": "25", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "20", "to": "25", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "14", "to": "24", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "14", "to": "21", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_D", "to": "F0_CHECKIN_81_100", "cost": 4, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ENT_D", "to": "F0_CHECKIN_61_80", "cost": 5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
 
-    { "from": "4", "to": "F2-1", "cost": 1, "bidirectional": true, "type": "ELEVATOR", "enabled": true },
-    { "from": "4", "to": "F2-1", "cost": 2, "bidirectional": true, "type": "STAIRS", "enabled": true },
-    { "from": "F2-1", "to": "F2-2", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "F2-2", "to": "F2-3", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
-    { "from": "6", "to": "F2-2", "cost": 1, "bidirectional": true, "type": "ESCALATOR", "enabled": true }
+    { "from": "F0_CHECKIN_01_10", "to": "F0_CHECKIN_11_30", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_11_30", "to": "F0_CHECKIN_31_50", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_31_50", "to": "F0_CHECKIN_51_60", "cost": 6.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_51_60", "to": "F0_CHECKIN_61_80", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_61_80", "to": "F0_CHECKIN_81_100", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_CHECKIN_81_100", "to": "F0_ASSISTANCE", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_CHECKIN_01_10", "to": "F0_SECURITY_A", "cost": 5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_11_30", "to": "F0_SECURITY_A", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_31_50", "to": "F0_SECURITY_A", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_CHECKIN_51_60", "to": "F0_SECURITY_B", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_61_80", "to": "F0_SECURITY_B", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CHECKIN_81_100", "to": "F0_SECURITY_B", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_SECURITY_A", "to": "F0_POSTSEC_A", "cost": 0.5, "bidirectional": false, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_SECURITY_B", "to": "F0_POSTSEC_B", "cost": 0.5, "bidirectional": false, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_POSTSEC_A", "to": "F0_GATES_56_57", "cost": 5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_POSTSEC_B", "to": "F0_POSTSEC_A", "cost": 10, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_GATES_56_57", "to": "F0_GATES_54_55", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATES_54_55", "to": "F0_GATES_52_53", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATES_52_53", "to": "F0_GATES_50_51", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_GATES_56_57", "to": "F0_DUTY_FREE_A", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATES_54_55", "to": "F0_DUTY_FREE_A", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATES_52_53", "to": "F0_DUTY_FREE_A", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATES_50_51", "to": "F0_DUTY_FREE_A", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_POSTSEC_B", "to": "F0_PASSPORT_CTRL", "cost": 4, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_PASSPORT_CTRL", "to": "F0_HALLWAY_W1", "cost": 1, "bidirectional": false, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_HALLWAY_W1", "to": "F0_DUTY_FREE_B", "cost": 15, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_HALLWAY_W1", "to": "F0_DUTY_FREE_C", "cost": 15, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_DUTY_FREE_C", "to": "F0_DUTY_FREE_B", "cost": 1.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_DUTY_FREE_B", "to": "F0_TOILET_A", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_DUTY_FREE_C", "to": "F0_GATE_15", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_TOILET_A", "to": "F0_GATE_15", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_TOILET_A", "to": "F0_GATE_1", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_15", "to": "F0_GATE_14", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_1", "to": "F0_GATE_14", "cost": 1.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_14", "to": "F0_GATE_13", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_1", "to": "F0_GATE_2", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_GATE_2", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_13", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_ESCALATOR_E_DOWN", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_E_DOWN", "to": "F0_ESCALATOR_B_UP", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_D_DOWN", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_D_DOWN", "to": "F0_ESCALATOR_C_UP", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_B_UP", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 4, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_C_UP", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 4, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_STAIRS_A_UP", "to": "F0_ENTRANCE_MAIN_CONCOURSE", "cost": 4, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_C_UP", "to": "F0_ESCALATOR_B_UP", "cost": 0.2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_ESCALATOR_C_UP", "to": "F0_GATE_12", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_D_DOWN", "to": "F0_GATE_12", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_B_UP", "to": "F0_GATE_3", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_ESCALATOR_E_DOWN", "to": "F0_GATE_3", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_CAFE_B", "to": "F0_GATE_3", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CAFE_A", "to": "F0_GATE_12", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_CAFE_A", "to": "F0_CAFE_B", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_GATE_4", "to": "F0_CAFE_B", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_4", "to": "F0_RESTAURANT_A", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_11", "to": "F0_CAFE_A", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_11", "to": "F0_RESTAURANT_A", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_11", "to": "F0_GATE_4", "cost": 2.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_CAFE_B", "to": "F0_ESCALATOR_F_DOWN", "cost": 1.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_GATE_5", "to": "F0_RESTAURANT_A", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_5", "to": "F0_GATE_6", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_10", "to": "F0_RESTAURANT_A", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_10", "to": "F0_GATE_9", "cost": 2.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_GATE_6", "to": "B1_GATES_7_8", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_6", "to": "F0_ESCALATOR_H_DOWN", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_GATE_9", "to": "B1_GATES_7_8", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_ESCALATOR_C_UP", "to": "B1_ESCALATOR_C_DOWN", "cost": 0.5, "bidirectional": false, "type": "ESCALATOR", "enabled": true },
+    { "from": "B1_ESCALATOR_C_DOWN", "to": "B1_ENTRANCE_DOWN_CONCOURSE", "cost": 0.1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_ESCALATOR_B_DOWN", "to": "F0_ESCALATOR_B_UP", "cost": 0.5, "bidirectional": false, "type": "ESCALATOR", "enabled": true },
+    { "from": "B1_ESCALATOR_B_DOWN", "to": "B1_ENTRANCE_DOWN_CONCOURSE", "cost": 0.1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_STAIRS_A_DOWN", "to": "B1_ENTRANCE_DOWN_CONCOURSE", "cost": 0.1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F0_STAIRS_A_UP", "to": "B1_STAIRS_A_DOWN", "cost": 0.6, "bidirectional": true, "type": "STAIRS", "enabled": true },
+
+    { "from": "B1_ENTRANCE_DOWN_CONCOURSE", "to": "B1_RESTAURANT_E", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_RESTAURANT_C", "to": "B1_RESTAURANT_E", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_ENTRANCE_DOWN_CONCOURSE", "to": "B1_RESTAURANT_C", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_FOOD_COURT", "to": "B1_RESTAURANT_D", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_FOOD_COURT", "to": "B1_RESTAURANT_B", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_RESTAURANT_C", "to": "B1_RESTAURANT_B", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_RESTAURANT_D", "to": "B1_RESTAURANT_E", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_GATES_24_25", "to": "B1_RESTAURANT_D", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_24_25", "to": "B1_GATES_20_21", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_GATES_24_25", "to": "B1_FOOD_COURT", "cost": 0.6, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_FOOD_COURT", "to": "B1_GATES_26_27", "cost": 0.6, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_FOOD_COURT", "to": "B1_GATES_20_21", "cost": 1.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_FOOD_COURT", "to": "B1_GATES_22_23", "cost": 1.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_26_27", "to": "B1_RESTAURANT_B", "cost": 0.5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_20_21", "to": "B1_GATES_24_25", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_26_27", "to": "B1_GATES_22_23", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_GATES_28_29", "to": "B1_RESTAURANT_C", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_TOILET_B", "to": "B1_RESTAURANT_E", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_GATES_28_29", "to": "B1_TOILET_B", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_30_31", "to": "B1_TOILET_B", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_GATES_28_29", "to": "B1_GATES_32_33", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_30_31", "to": "B1_GATES_32_33", "cost": 2, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "B1_GATES_30_31", "to": "B1_GATES_34_35", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_32_33", "to": "B1_GATES_34_35", "cost": 3, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_34_35", "to": "B1_GATES_36_37", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "B1_GATES_36_37", "to": "B1_GATES_38_39", "cost": 4, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+
+    { "from": "F0_ESCALATOR_E_DOWN", "to": "F1_ESCALATOR_E_UP", "cost": 1, "bidirectional": false, "type": "ESCALATOR", "enabled": true },
+    { "from": "F0_ESCALATOR_H_DOWN", "to": "F1_ESCALATOR_H_UP", "cost": 1, "bidirectional": false, "type": "ESCALATOR", "enabled": true },
+    { "from": "F1_ESCALATOR_D_UP", "to": "F0_ESCALATOR_D_DOWN", "cost": 1, "bidirectional": false, "type": "ESCALATOR", "enabled": true },
+    { "from": "F1_ESCALATOR_F_UP", "to": "F0_ESCALATOR_F_DOWN", "cost": 1, "bidirectional": true, "type": "ESCALATOR", "enabled": true },
+
+    { "from": "F1_ESCALATOR_E_UP", "to": "F1_BUSINESS_LOUNGE_A", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F1_BUSINESS_LOUNGE_B", "to": "F1_BUSINESS_LOUNGE_A", "cost": 5, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F1_BUSINESS_LOUNGE_B", "to": "F1_VIP_LOUNGE", "cost": 8, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F1_BUSINESS_LOUNGE_A", "to": "F1_VIP_LOUNGE", "cost": 12, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F1_ESCALATOR_F_UP", "to": "F1_VIP_LOUNGE", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true },
+    { "from": "F1_ESCALATOR_H_UP", "to": "F1_BUSINESS_LOUNGE_B", "cost": 1, "bidirectional": true, "type": "CORRIDOR", "enabled": true }
   ]
 }

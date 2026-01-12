@@ -1,9 +1,9 @@
-package graph;
+package com.terminal.navigation.graph;
 
-import model.EdgeDef;
-import model.EdgeType;
-import model.Node;
-import model.TerminalMap;
+import com.terminal.navigation.model.EdgeDef;
+import com.terminal.navigation.model.EdgeType;
+import com.terminal.navigation.model.Node;
+import com.terminal.navigation.model.TerminalMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -83,8 +83,8 @@ class GraphBuilderTest {
             TerminalMap map = createMultiFloorMap();
             Graph graph = builder.build(map);
 
-            assertEquals(1, graph.getNodeFloor("F1"));
-            assertEquals(2, graph.getNodeFloor("F2"));
+            assertEquals(1.0, graph.getNodeFloor("F1"));
+            assertEquals(2.0, graph.getNodeFloor("F2"));
         }
 
         @Test
@@ -176,7 +176,7 @@ class GraphBuilderTest {
             TerminalMap map = new TerminalMap();
             map.nodes = List.of(createNode("A"), createNode("B"));
             EdgeDef edge = createEdge("A", "B");
-            edge.cost = 0;
+            edge.cost = 0.0;
             map.edges = List.of(edge);
 
             IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -190,7 +190,7 @@ class GraphBuilderTest {
             TerminalMap map = new TerminalMap();
             map.nodes = List.of(createNode("A"), createNode("B"));
             EdgeDef edge = createEdge("A", "B");
-            edge.cost = -1;
+            edge.cost = -1.0;
             map.edges = List.of(edge);
 
             IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -233,13 +233,13 @@ class GraphBuilderTest {
         node.label = "Node " + id;
         node.description = "Description for " + id;
         node.enabled = true;
-        node.floor = 1;
+        node.floor = 1.0;
         return node;
     }
 
     private Node createNode(String id, int floor) {
         Node node = createNode(id);
-        node.floor = floor;
+        node.floor = (double) floor;
         return node;
     }
 
@@ -253,7 +253,7 @@ class GraphBuilderTest {
         EdgeDef edge = new EdgeDef();
         edge.from = from;
         edge.to = to;
-        edge.cost = 1;
+        edge.cost = 1.0;
         edge.bidirectional = true;
         edge.type = EdgeType.CORRIDOR;
         edge.enabled = true;
