@@ -1,0 +1,25 @@
+{
+  "name": "terminal-indoor-navigation-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "esbuild src/main.tsx --bundle --format=esm --jsx=automatic --sourcemap --loader:.png=file --outfile=../backend/src/main/resources/static/assets/app.js --watch",
+    "build": "npm run clean && npm run typecheck && npm run build:assets && npm run copy:html",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "build:assets": "esbuild src/main.tsx --bundle --minify --format=esm --jsx=automatic --loader:.png=file --outfile=../backend/src/main/resources/static/assets/app.js",
+    "copy:html": "cp index.html ../backend/src/main/resources/static/index.html",
+    "clean": "rm -rf ../backend/src/main/resources/static/assets"
+  },
+  "dependencies": {
+    "lucide-react": "^1.16.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "esbuild": "^0.25.9",
+    "typescript": "~5.8.3"
+  }
+}
