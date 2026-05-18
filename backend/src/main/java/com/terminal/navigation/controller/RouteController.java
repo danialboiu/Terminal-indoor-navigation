@@ -1,72 +1,38 @@
 package com.terminal.navigation.controller;
 
-import com.terminal.navigation.graph.Graph;
-import com.terminal.navigation.routing.DijkstraRouter;
-import com.terminal.navigation.routing.PassengerProfile;
-import com.terminal.navigation.routing.RouteResult;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import com.terminal.navigation.service.TerminalRouteService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
 public class RouteController {
+    private final TerminalRouteService routeService;
 
-    private final Graph graph;
-    private final DijkstraRouter router;
-
-    public RouteController(Graph graph, DijkstraRouter router) {
-        this.graph = graph;
-        this.router = router;
+    public RouteController(TerminalRouteService routeService) {
+        this.routeService = routeService;
     }
 
-    @GetMapping("/route")
-    public ResponseEntity<?> getRoute(
-            @RequestParam String from,
-            @RequestParam String to,
-            @RequestParam(defaultValue = "PASSENGER") String profile) {
-        try {
-            PassengerProfile passengerProfile = PassengerProfile.valueOf(profile.toUpperCase());
-            RouteResult result = router.shortestPath(graph, from, to, passengerProfile);
-            return ResponseEntity.ok(new RouteResponse(
-                    result.from(),
-                    result.to(),
-                    result.path(),
-                    Math.round(result.totalCost() * 10.0) / 10.0,
-                    passengerProfile.name()
-            ));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
-        }
+    // Main route endpoint: calculates the route and returns passenger-friendly AI/mock instructions.
+    @GetMapping("/route-instructions")
+    public TerminalRouteService.RouteInstructionsResponse getRouteInstructions(
+            @RequestParam("from") String from,
+            @RequestParam("to") String to,
+            @RequestParam(name = "profile", defaultValue = "PASSENGER") String profile) {
+        return routeService.routeInstructions(from, to, profile);
     }
 
+    // Provides terminal locations for the From/To dropdowns.
     @GetMapping("/nodes")
-    public ResponseEntity<?> getNodes() {
-        return ResponseEntity.ok(Map.of("nodes", graph.nodeIds()));
+    public TerminalRouteService.NodesResponse getNodes() {
+        return routeService.nodes();
     }
 
+    // Provides supported passenger profiles and their UI descriptions.
     @GetMapping("/profiles")
-    public ResponseEntity<?> getProfiles() {
-        List<ProfileInfo> profiles = Arrays.stream(PassengerProfile.values())
-                .map(p -> new ProfileInfo(p.name(), getProfileDescription(p)))
-                .toList();
-        return ResponseEntity.ok(Map.of("profiles", profiles));
+    public TerminalRouteService.ProfilesResponse getProfiles() {
+        return routeService.profiles();
     }
-
-    private String getProfileDescription(PassengerProfile profile) {
-        return switch (profile) {
-            case PASSENGER -> "Standard passenger - can use all paths";
-            case PARENT_WITH_STROLLER -> "Parent with stroller - cannot use stairs or escalators";
-            case ELDERLY -> "Elderly passenger - cannot use stairs";
-            case WHEELCHAIR_USER -> "Wheelchair user - cannot use stairs or escalators";
-        };
-    }
-
-    record RouteResponse(String from, String to, List<String> path, double cost, String profile) {}
-    record ProfileInfo(String name, String description) {}
 }

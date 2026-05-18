@@ -7,14 +7,15 @@ package com.terminal.navigation.model;
 public class Node {
     public String id;
     public String label;
-    public String description;
+
     public Boolean enabled;
     public Double floor;
+    public String checkpointType;
 
     public Node() {}
 
     @Override
     public String toString() {
-        return "Node{id='%s', label='%s', description='%s'}".formatted(id, label, description);
+        return "Node{id='%s', label='%s'}".formatted(id, label);
     }
 }

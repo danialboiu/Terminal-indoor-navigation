@@ -103,9 +103,22 @@ public final class GraphBuilder {
             }
 
             // Keep disabled edges in graph - filtered at routing time
-            adj.get(e.from).add(new GraphEdge(e.to, e.cost, e.type, e.enabled));
+            String relationHint = cleanText(e.relationHint);
+            adj.get(e.from).add(new GraphEdge(
+                    e.to,
+                    e.cost,
+                    e.type,
+                    e.enabled,
+                    relationHint
+            ));
             if (e.bidirectional) {
-                adj.get(e.to).add(new GraphEdge(e.from, e.cost, e.type, e.enabled));
+                adj.get(e.to).add(new GraphEdge(
+                        e.from,
+                        e.cost,
+                        e.type,
+                        e.enabled,
+                        relationHint
+                ));
             }
         }
 
@@ -119,4 +132,9 @@ public final class GraphBuilder {
     private static boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
     }
+
+    private static String cleanText(String value) {
+        return value == null ? "" : value.trim();
+    }
+
 }

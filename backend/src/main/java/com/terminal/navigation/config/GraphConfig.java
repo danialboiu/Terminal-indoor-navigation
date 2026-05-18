@@ -11,13 +11,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GraphConfig {
 
+    // Loads the terminal layout definition from terminal-map.json.
     @Bean
-    public Graph graph() throws Exception {
+    public TerminalMap terminalMap() throws Exception {
         TerminalMapLoader loader = new TerminalMapLoader();
-        TerminalMap map = loader.load("terminal-map.json");
-        return new GraphBuilder().build(map);
+        return loader.load("terminal-map.json");
     }
 
+    // Converts the loaded terminal layout into the in-memory graph used for routing.
+    @Bean
+    public Graph graph(TerminalMap terminalMap) {
+        return new GraphBuilder().build(terminalMap);
+    }
+
+    // Provides the shortest-path router used by the API when calculating routes.
     @Bean
     public DijkstraRouter router() {
         return new DijkstraRouter();
