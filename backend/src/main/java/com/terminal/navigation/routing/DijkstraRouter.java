@@ -12,13 +12,6 @@ import java.util.*;
 public final class DijkstraRouter {
 
     /**
-     * Computes the shortest path using default PASSENGER profile.
-     */
-    public RouteResult shortestPath(Graph g, String from, String to) {
-        return shortestPath(g, from, to, PassengerProfile.PASSENGER);
-    }
-
-    /**
      * Computes the shortest path between two nodes, respecting passenger profile restrictions.
      *
      * @param g       validated terminal graph

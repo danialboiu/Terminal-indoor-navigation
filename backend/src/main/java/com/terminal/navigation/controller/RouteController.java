@@ -1,5 +1,8 @@
 package com.terminal.navigation.controller;
 
+import com.terminal.navigation.dto.NodesResponse;
+import com.terminal.navigation.dto.ProfilesResponse;
+import com.terminal.navigation.dto.RouteInstructionsResponse;
 import com.terminal.navigation.service.TerminalRouteService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +20,7 @@ public class RouteController {
 
     // Main route endpoint: calculates the route and returns passenger-friendly AI/mock instructions.
     @GetMapping("/route-instructions")
-    public TerminalRouteService.RouteInstructionsResponse getRouteInstructions(
+    public RouteInstructionsResponse getRouteInstructions(
             @RequestParam("from") String from,
             @RequestParam("to") String to,
             @RequestParam(name = "profile", defaultValue = "PASSENGER") String profile) {
@@ -26,13 +29,13 @@ public class RouteController {
 
     // Provides terminal locations for the From/To dropdowns.
     @GetMapping("/nodes")
-    public TerminalRouteService.NodesResponse getNodes() {
+    public NodesResponse getNodes() {
         return routeService.nodes();
     }
 
     // Provides supported passenger profiles and their UI descriptions.
     @GetMapping("/profiles")
-    public TerminalRouteService.ProfilesResponse getProfiles() {
+    public ProfilesResponse getProfiles() {
         return routeService.profiles();
     }
 }
