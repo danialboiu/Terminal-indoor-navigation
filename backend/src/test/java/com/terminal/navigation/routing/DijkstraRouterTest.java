@@ -33,7 +33,7 @@ class DijkstraRouterTest {
         @DisplayName("finds direct path between adjacent nodes")
         void findsDirectPath() {
             Graph graph = buildSimpleGraph();
-            RouteResult result = router.shortestPath(graph, "A", "B");
+            RouteResult result = router.shortestPath(graph, "A", "B", PassengerProfile.PASSENGER);
 
             assertEquals("A", result.from());
             assertEquals("B", result.to());
@@ -45,7 +45,7 @@ class DijkstraRouterTest {
         @DisplayName("finds shortest path through multiple nodes")
         void findsShortestPathThroughMultipleNodes() {
             Graph graph = buildSimpleGraph();
-            RouteResult result = router.shortestPath(graph, "A", "C");
+            RouteResult result = router.shortestPath(graph, "A", "C", PassengerProfile.PASSENGER);
 
             assertEquals(List.of("A", "B", "C"), result.path());
             assertEquals(2.0, result.totalCost());
@@ -55,7 +55,7 @@ class DijkstraRouterTest {
         @DisplayName("returns same node when start equals destination")
         void sameStartAndDestination() {
             Graph graph = buildSimpleGraph();
-            RouteResult result = router.shortestPath(graph, "A", "A");
+            RouteResult result = router.shortestPath(graph, "A", "A", PassengerProfile.PASSENGER);
 
             assertEquals(List.of("A"), result.path());
             assertEquals(0.0, result.totalCost());
@@ -68,7 +68,7 @@ class DijkstraRouterTest {
             // |               |
             // +------10-------+
             Graph graph = buildGraphWithAlternativePaths();
-            RouteResult result = router.shortestPath(graph, "A", "D");
+            RouteResult result = router.shortestPath(graph, "A", "D", PassengerProfile.PASSENGER);
 
             // Should take A -> B -> D (cost 2) instead of A -> D (cost 10)
             assertEquals(List.of("A", "B", "D"), result.path());
@@ -84,7 +84,7 @@ class DijkstraRouterTest {
         @DisplayName("avoids disabled edges")
         void avoidsDisabledEdges() {
             Graph graph = buildGraphWithDisabledEdge();
-            RouteResult result = router.shortestPath(graph, "A", "C");
+            RouteResult result = router.shortestPath(graph, "A", "C", PassengerProfile.PASSENGER);
 
             // Direct A->C is disabled, must go A->B->C
             assertEquals(List.of("A", "B", "C"), result.path());
@@ -97,7 +97,7 @@ class DijkstraRouterTest {
             Graph graph = buildGraphWithOnlyDisabledRoute();
 
             assertThrows(IllegalStateException.class, () ->
-                    router.shortestPath(graph, "A", "B")
+                    router.shortestPath(graph, "A", "B", PassengerProfile.PASSENGER)
             );
         }
 
@@ -105,7 +105,7 @@ class DijkstraRouterTest {
         @DisplayName("avoids disabled nodes")
         void avoidsDisabledNodes() {
             Graph graph = buildGraphWithDisabledNode();
-            RouteResult result = router.shortestPath(graph, "A", "D");
+            RouteResult result = router.shortestPath(graph, "A", "D", PassengerProfile.PASSENGER);
 
             // Node B is disabled, must go A->C->D
             assertEquals(List.of("A", "C", "D"), result.path());
@@ -117,7 +117,7 @@ class DijkstraRouterTest {
             Graph graph = buildGraphWithDisabledNode();
 
             assertThrows(IllegalArgumentException.class, () ->
-                    router.shortestPath(graph, "B", "D")
+                    router.shortestPath(graph, "B", "D", PassengerProfile.PASSENGER)
             );
         }
 
@@ -127,7 +127,7 @@ class DijkstraRouterTest {
             Graph graph = buildGraphWithDisabledNode();
 
             assertThrows(IllegalArgumentException.class, () ->
-                    router.shortestPath(graph, "A", "B")
+                    router.shortestPath(graph, "A", "B", PassengerProfile.PASSENGER)
             );
         }
     }
@@ -142,7 +142,7 @@ class DijkstraRouterTest {
             Graph graph = buildSimpleGraph();
 
             IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-                    router.shortestPath(graph, "UNKNOWN", "A")
+                    router.shortestPath(graph, "UNKNOWN", "A", PassengerProfile.PASSENGER)
             );
             assertTrue(ex.getMessage().contains("Unknown start node"));
         }
@@ -153,7 +153,7 @@ class DijkstraRouterTest {
             Graph graph = buildSimpleGraph();
 
             IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-                    router.shortestPath(graph, "A", "UNKNOWN")
+                    router.shortestPath(graph, "A", "UNKNOWN", PassengerProfile.PASSENGER)
             );
             assertTrue(ex.getMessage().contains("Unknown destination node"));
         }
@@ -164,7 +164,7 @@ class DijkstraRouterTest {
             Graph graph = buildDisconnectedGraph();
 
             assertThrows(IllegalStateException.class, () ->
-                    router.shortestPath(graph, "A", "Z")
+                    router.shortestPath(graph, "A", "Z", PassengerProfile.PASSENGER)
             );
         }
 
@@ -172,7 +172,7 @@ class DijkstraRouterTest {
         @DisplayName("throws for null graph")
         void throwsForNullGraph() {
             assertThrows(NullPointerException.class, () ->
-                    router.shortestPath(null, "A", "B")
+                    router.shortestPath(null, "A", "B", PassengerProfile.PASSENGER)
             );
         }
     }

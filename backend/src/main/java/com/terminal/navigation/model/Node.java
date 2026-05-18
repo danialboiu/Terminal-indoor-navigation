@@ -10,6 +10,10 @@ public class Node {
 
     public Boolean enabled;
     public Double floor;
+    public String category;
+    public Boolean selectableFrom;
+    public Boolean selectableTo;
+    public String poiType;
     public String checkpointType;
 
     public Node() {}
