@@ -9,6 +9,5 @@ public record NarrationInputStep(
         double floorFrom,
         double floorTo,
         String fromCheckpointType,
-        String toCheckpointType,
-        String edgeRelationHint
+        String toCheckpointType
 ) {}

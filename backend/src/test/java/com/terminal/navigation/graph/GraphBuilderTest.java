@@ -88,16 +88,6 @@ class GraphBuilderTest {
             assertTrue(edges.stream().anyMatch(e -> e.type() == EdgeType.ELEVATOR));
         }
 
-        @Test
-        @DisplayName("preserves relation hints on graph edges")
-        void preservesRelationHints() {
-            TerminalMap map = createValidTerminalMap();
-            map.edges.get(0).relationHint = "Node B is beside Node A.";
-
-            Graph graph = builder.build(map);
-
-            assertEquals("Node B is beside Node A.", graph.edgesFrom("A").get(0).relationHint());
-        }
     }
 
     @Nested

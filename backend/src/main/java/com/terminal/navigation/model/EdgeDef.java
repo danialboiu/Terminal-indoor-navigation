@@ -19,7 +19,6 @@ public class EdgeDef {
     public EdgeType type;
 
     public Boolean enabled;
-    public String relationHint;
 
     public EdgeDef() {}
 
