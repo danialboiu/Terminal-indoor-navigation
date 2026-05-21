@@ -1,44 +1,56 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import Select, { createFilter, type GroupBase } from 'react-select'
 import {
   Accessibility,
+  ArrowDownUp,
   Baby,
-  Clock3,
+  BetweenVerticalStart,
+  Footprints,
   Flag,
-  Layers,
   MapPin,
+  MessageCircle,
+  MoveDown,
+  MoveUp,
   Navigation,
-  QrCode,
-  Route,
+  Send,
   User,
   type LucideIcon,
 } from 'lucide-react'
 import './App.css'
-import type { PassengerProfile, RouteDTO } from './types'
+import type {
+  AiMessageRequest,
+  AiMessageResponse,
+  ErrorResponse,
+  NodeDTO,
+  NodesResponse,
+  PassengerProfile,
+  ProfilesResponse,
+  RouteDTO,
+  RouteInputStep,
+  RouteInstruction,
+} from './types'
 
-type NodesResponse = {
-  nodes: string[]
+type NodeSelectOption = {
+  value: string
+  label: string
+  group: string
+  hint?: string
+  keywords: string
 }
 
-type ProfilesResponse = {
-  profiles: Array<{
-    name: PassengerProfile
-    description: string
-  }>
+type ChatMessage = {
+  id: string
+  role: 'user' | 'assistant'
+  text: string
 }
-
-type ErrorResponse = {
-  error?: string
-}
-
-type BarcodeDetectorLike = {
-  detect: (source: ImageBitmapSource) => Promise<Array<{ rawValue?: string }>>
-}
-
-type BarcodeDetectorCtor = new (options?: {
-  formats?: string[]
-}) => BarcodeDetectorLike
 
 const DEFAULT_PROFILE: PassengerProfile = 'PASSENGER'
+const DEFAULT_PROFILE_DESCRIPTIONS: Record<PassengerProfile, string> = {
+  PASSENGER: '',
+  ELDERLY: '',
+  PARENT_WITH_STROLLER: '',
+  WHEELCHAIR_USER: '',
+}
 
 const PROFILE_META: Record<
   PassengerProfile,
@@ -113,70 +125,6 @@ function normalizeNodeCandidate(value: string): string {
     .replace(/^_+|_+$/g, '')
 }
 
-function extractNodeIdFromQr(rawValue: string, nodes: string[]): string | null {
-  const normalizedNodes = new Set(nodes.map((node) => normalizeNodeCandidate(node)))
-  const candidates: string[] = []
-  const trimmed = rawValue.trim()
-
-  if (!trimmed) {
-    return null
-  }
-
-  candidates.push(trimmed)
-
-  try {
-    const parsedJson = JSON.parse(trimmed) as {
-      node?: string
-      from?: string
-      location?: string
-      id?: string
-    }
-    if (typeof parsedJson.node === 'string') candidates.push(parsedJson.node)
-    if (typeof parsedJson.from === 'string') candidates.push(parsedJson.from)
-    if (typeof parsedJson.location === 'string') candidates.push(parsedJson.location)
-    if (typeof parsedJson.id === 'string') candidates.push(parsedJson.id)
-  } catch {
-    // Not JSON, continue with URL/plain parsing.
-  }
-
-  try {
-    const url = new URL(trimmed)
-    const keys = ['node', 'from', 'location', 'id']
-    for (const key of keys) {
-      const value = url.searchParams.get(key)
-      if (value) {
-        candidates.push(value)
-      }
-    }
-    const pathParts = url.pathname.split('/').filter(Boolean)
-    if (pathParts.length > 0) {
-      candidates.push(pathParts[pathParts.length - 1])
-    }
-  } catch {
-    // Not a URL, plain QR payload.
-  }
-
-  for (const candidate of candidates) {
-    const normalized = normalizeNodeCandidate(candidate)
-    if (normalizedNodes.has(normalized)) {
-      const direct = nodes.find(
-        (node) => normalizeNodeCandidate(node) === normalized,
-      )
-      if (direct) {
-        return direct
-      }
-    }
-  }
-
-  return null
-}
-
-function getBarcodeDetectorCtor(): BarcodeDetectorCtor | null {
-  const detector = (globalThis as unknown as { BarcodeDetector?: BarcodeDetectorCtor })
-    .BarcodeDetector
-  return typeof detector === 'function' ? detector : null
-}
-
 function getFromNodeFromUrl(nodes: string[]): string | null {
   const params = new URLSearchParams(globalThis.location.search)
   const fromCandidate =
@@ -202,50 +150,156 @@ function routeNoticeTone(message: string): 'error' | 'warning' {
   return 'error'
 }
 
+async function readApiResponse<T>(response: Response, fallback: string): Promise<T> {
+  const payload = (await response.json()) as T | ErrorResponse
+
+  if (!response.ok) {
+    throw new Error(readApiError(payload, fallback))
+  }
+
+  return payload as T
+}
+
+function profileDescriptionMap(
+  profiles: ProfilesResponse['profiles'],
+): Record<PassengerProfile, string> {
+  const descriptions = { ...DEFAULT_PROFILE_DESCRIPTIONS }
+  for (const item of profiles) {
+    descriptions[item.name] = item.description
+  }
+  return descriptions
+}
+
+function makeNodeOption(node: NodeDTO): NodeSelectOption {
+  return {
+    value: node.id,
+    label: node.label || formatNodeLabel(node.id),
+    group: node.category || 'Other',
+    hint: node.hint,
+    keywords: `${node.id} ${node.label} ${node.category} ${node.hint ?? ''}`.toLowerCase(),
+  }
+}
+
+function groupedNodeOptions(nodes: NodeSelectOption[]): Array<GroupBase<NodeSelectOption>> {
+  const groups = new Map<string, NodeSelectOption[]>()
+  for (const option of nodes) {
+    const list = groups.get(option.group) ?? []
+    list.push(option)
+    groups.set(option.group, list)
+  }
+
+  return [...groups.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([label, options]) => ({
+      label,
+      options: options.sort((a, b) => a.label.localeCompare(b.label)),
+    }))
+}
+
+function edgeIconForInstruction(
+  routeSteps: RouteInputStep[],
+  instruction: RouteInstruction,
+): LucideIcon {
+  const segment = routeSteps.slice(
+    instruction.fromStepIndex,
+    instruction.toStepIndex + 1,
+  )
+  const emphasized =
+    segment.find((step) => step.edgeType !== 'CORRIDOR') ??
+    routeSteps[instruction.fromStepIndex]
+
+  if (!emphasized) {
+    return Navigation
+  }
+
+  if (emphasized.edgeType === 'ELEVATOR') {
+    return BetweenVerticalStart
+  }
+  if (emphasized.edgeType === 'ESCALATOR') {
+    return emphasized.floorTo < emphasized.floorFrom ? MoveDown : MoveUp
+  }
+  if (emphasized.edgeType === 'STAIRS') {
+    return ArrowDownUp
+  }
+  return Footprints
+}
+
+async function fetchRouteInstructions(
+  from: string,
+  to: string,
+  profile: PassengerProfile,
+): Promise<RouteDTO> {
+  const params = new URLSearchParams({ from, to, profile })
+  const response = await fetch(`/api/route-instructions?${params.toString()}`)
+  return readApiResponse<RouteDTO>(response, 'Unable to find route')
+}
+
+async function sendAiMessage(
+  message: string,
+  messages: ChatMessage[],
+  routeContext: RouteDTO | null,
+): Promise<AiMessageResponse> {
+  const payload: AiMessageRequest = {
+    message,
+    messages: messages.map((item) => ({
+      role: item.role,
+      text: item.text,
+    })),
+    routeContext,
+  }
+
+  const response = await fetch('/api/ai-message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  return readApiResponse<AiMessageResponse>(response, 'Unable to get AI answer')
+}
+
 function App() {
-  const [nodes, setNodes] = useState<string[]>([])
+  const chatBodyRef = useRef<HTMLDivElement | null>(null)
+  const [nodes, setNodes] = useState<NodeDTO[]>([])
   const [profiles, setProfiles] = useState<PassengerProfile[]>([])
   const [profileDescriptions, setProfileDescriptions] = useState<
     Record<PassengerProfile, string>
-  >({
-    PASSENGER: '',
-    ELDERLY: '',
-    PARENT_WITH_STROLLER: '',
-    WHEELCHAIR_USER: '',
-  })
+  >(DEFAULT_PROFILE_DESCRIPTIONS)
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [profile, setProfile] = useState<PassengerProfile>(DEFAULT_PROFILE)
   const [route, setRoute] = useState<RouteDTO | null>(null)
   const [error, setError] = useState('')
+  const [aiMessage, setAiMessage] = useState('')
+  const [aiMessages, setAiMessages] = useState<ChatMessage[]>([])
+  const [aiError, setAiError] = useState('')
   const [setupLoading, setSetupLoading] = useState(true)
   const [loading, setLoading] = useState(false)
-  const [scanActive, setScanActive] = useState(false)
-  const [scanStatus, setScanStatus] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
 
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-  const streamRef = useRef<MediaStream | null>(null)
-  const detectorRef = useRef<BarcodeDetectorLike | null>(null)
-  const frameRef = useRef<number | null>(null)
-  const scanningRef = useRef(false)
-
-  function stopScanner() {
-    scanningRef.current = false
-    if (frameRef.current !== null) {
-      cancelAnimationFrame(frameRef.current)
-      frameRef.current = null
-    }
-    if (streamRef.current) {
-      for (const track of streamRef.current.getTracks()) {
-        track.stop()
-      }
-      streamRef.current = null
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null
-    }
-    setScanActive(false)
+  const fromNodes = nodes.filter((node) => node.selectableFrom)
+  const toNodes = nodes.filter((node) => node.selectableTo)
+  const fromSelectList = fromNodes.map(makeNodeOption)
+  if (from && !fromNodes.some((node) => node.id === from)) {
+    fromSelectList.unshift({
+      value: from,
+      label: formatNodeLabel(from),
+      group: 'Current exact point',
+      keywords: `${from} ${formatNodeLabel(from)}`.toLowerCase(),
+    })
   }
+  const fromSelectGroups = groupedNodeOptions(fromSelectList)
+
+  const toSelectList = toNodes.map(makeNodeOption)
+  const toSelectGroups = groupedNodeOptions(toSelectList)
+  const fromSelected = fromSelectList.find((item) => item.value === from) ?? null
+  const toSelected = toSelectList.find((item) => item.value === to) ?? null
+  const canSubmit =
+    !setupLoading &&
+    !loading &&
+    Boolean(from && to && profile) &&
+    from !== to
+  const canSendAiMessage = !aiLoading && aiMessage.trim().length > 0
 
   useEffect(() => {
     let cancelled = false
@@ -260,20 +314,20 @@ function App() {
           fetch('/api/profiles'),
         ])
 
-        const nodesPayload = (await nodesRes.json()) as NodesResponse | ErrorResponse
-        const profilesPayload = (await profilesRes.json()) as
-          | ProfilesResponse
-          | ErrorResponse
+        const nodesPayload = await readApiResponse<NodesResponse>(
+          nodesRes,
+          'Failed to load nodes',
+        )
+        const profilesPayload = await readApiResponse<ProfilesResponse>(
+          profilesRes,
+          'Failed to load profiles',
+        )
 
-        if (!nodesRes.ok) {
-          throw new Error(readApiError(nodesPayload, 'Failed to load nodes'))
-        }
-        if (!profilesRes.ok) {
-          throw new Error(readApiError(profilesPayload, 'Failed to load profiles'))
-        }
-
-        const loadedNodes = [...(nodesPayload as NodesResponse).nodes].sort()
-        const loadedProfiles = (profilesPayload as ProfilesResponse).profiles
+        const loadedNodes = [...nodesPayload.nodes].sort((a, b) =>
+          a.label.localeCompare(b.label),
+        )
+        const loadedNodeIds = loadedNodes.map((node) => node.id)
+        const loadedProfiles = profilesPayload.profiles
         const loadedProfileNames = loadedProfiles.map((item) => item.name)
 
         if (cancelled) {
@@ -282,31 +336,18 @@ function App() {
 
         setNodes(loadedNodes)
         setProfiles(loadedProfileNames)
-        setProfileDescriptions({
-          PASSENGER:
-            loadedProfiles.find((item) => item.name === 'PASSENGER')
-              ?.description ?? '',
-          ELDERLY:
-            loadedProfiles.find((item) => item.name === 'ELDERLY')
-              ?.description ?? '',
-          PARENT_WITH_STROLLER:
-            loadedProfiles.find((item) => item.name === 'PARENT_WITH_STROLLER')
-              ?.description ?? '',
-          WHEELCHAIR_USER:
-            loadedProfiles.find((item) => item.name === 'WHEELCHAIR_USER')
-              ?.description ?? '',
-        })
+        setProfileDescriptions(profileDescriptionMap(loadedProfiles))
 
-        const firstNode = loadedNodes[0] ?? ''
-        const secondNode = loadedNodes[1] ?? firstNode
-        const fromFromUrl = getFromNodeFromUrl(loadedNodes)
+        const firstNode = loadedNodes.find((node) => node.selectableFrom)?.id ?? ''
+        const secondNode =
+          loadedNodes.find((node) => node.selectableTo && node.id !== firstNode)?.id ??
+          loadedNodes.find((node) => node.selectableTo)?.id ??
+          firstNode
+        const fromNodeFromUrl = getFromNodeFromUrl(loadedNodeIds)
 
-        setFrom(fromFromUrl ?? firstNode)
+        setFrom(fromNodeFromUrl ?? firstNode)
         setTo(secondNode)
         setProfile(loadedProfileNames[0] ?? DEFAULT_PROFILE)
-        if (fromFromUrl) {
-          setScanStatus(`Starting point set from QR link: ${formatNodeLabel(fromFromUrl)}.`)
-        }
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Failed to load form data')
@@ -322,98 +363,15 @@ function App() {
 
     return () => {
       cancelled = true
-      stopScanner()
     }
   }, [])
 
-  async function startScanner() {
-    if (scanActive || setupLoading || nodes.length === 0) {
-      return
+  useEffect(() => {
+    const chatBody = chatBodyRef.current
+    if (chatBody) {
+      chatBody.scrollTop = chatBody.scrollHeight
     }
-
-    setScanStatus('')
-
-    const DetectorCtor = getBarcodeDetectorCtor()
-    if (!DetectorCtor) {
-      setScanStatus(
-        'This browser does not support in-app QR scan. Use your phone camera to open a QR link with a starting point.',
-      )
-      return
-    }
-
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setScanStatus('Camera access is unavailable in this browser context.')
-      return
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: 'environment' } },
-        audio: false,
-      })
-
-      streamRef.current = stream
-      if (!videoRef.current) {
-        throw new Error('Scanner video element is not ready.')
-      }
-      videoRef.current.srcObject = stream
-      await videoRef.current.play()
-
-      try {
-        detectorRef.current = new DetectorCtor({ formats: ['qr_code'] })
-      } catch {
-        detectorRef.current = new DetectorCtor()
-      }
-
-      scanningRef.current = true
-      setScanActive(true)
-      setScanStatus('Scanning QR. Point camera at location code.')
-
-      const tick = () => {
-        const video = videoRef.current
-        const detector = detectorRef.current
-        if (!scanningRef.current || !video || !detector) {
-          return
-        }
-
-        detector
-          .detect(video)
-          .then((results) => {
-            if (!scanningRef.current) {
-              return
-            }
-
-            const rawValue = results[0]?.rawValue
-            if (rawValue) {
-              const node = extractNodeIdFromQr(rawValue, nodes)
-              if (node) {
-                setFrom(node)
-                setScanStatus(`Scanned start location: ${formatNodeLabel(node)}.`)
-                stopScanner()
-                return
-              }
-              setScanStatus('QR detected, but it does not map to a known node.')
-            }
-
-            frameRef.current = requestAnimationFrame(tick)
-          })
-          .catch(() => {
-            if (scanningRef.current) {
-              frameRef.current = requestAnimationFrame(tick)
-            }
-          })
-      }
-
-      frameRef.current = requestAnimationFrame(tick)
-    } catch (err) {
-      stopScanner()
-      setScanStatus(
-        err instanceof Error
-          ? `Cannot open camera: ${err.message}`
-          : 'Cannot open camera for QR scan.',
-      )
-    }
-  }
+  }, [aiMessages, aiLoading])
 
   async function findRoute(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -426,14 +384,8 @@ function App() {
     setRoute(null)
 
     try {
-      const params = new URLSearchParams({ from, to, profile })
-      const response = await fetch(`/api/route?${params.toString()}`)
-      const payload = (await response.json()) as RouteDTO | ErrorResponse
-
-      if (!response.ok) {
-        throw new Error(readApiError(payload, 'Unable to find route'))
-      }
-      setRoute(payload as RouteDTO)
+      const narrated = await fetchRouteInstructions(from, to, profile)
+      setRoute(narrated)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to find route')
     } finally {
@@ -441,10 +393,50 @@ function App() {
     }
   }
 
-  const canSubmit =
-    !setupLoading && !loading && Boolean(from && to && profile) && from !== to
+  async function askAi(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const message = aiMessage.trim()
+    if (!message) {
+      return
+    }
+
+    setAiLoading(true)
+    setAiError('')
+    setAiMessage('')
+    const previousMessages = aiMessages
+    setAiMessages((messages) => [
+      ...messages,
+      {
+        id: `user-${Date.now()}`,
+        role: 'user',
+        text: message,
+      },
+    ])
+
+    try {
+      const response = await sendAiMessage(message, previousMessages, route)
+      setAiMessages((messages) => [
+        ...messages,
+        {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          text: response.answer,
+        },
+      ])
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : 'Unable to get AI answer')
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
   const routeReady = Boolean(route)
   const errorTone = routeNoticeTone(error)
+  const routeSteps = route?.inputSteps ?? []
+  const routeInstructions = route?.instructions ?? []
+  const routeFromLabel = routeSteps[0]?.fromLabel ?? ''
+  const lastRouteStep = routeSteps[routeSteps.length - 1]
+  const routeToLabel = lastRouteStep?.toLabel ?? ''
 
   return (
     <main className="wf-page">
@@ -466,61 +458,58 @@ function App() {
 
           <div className="wf-field">
             <label htmlFor="from">From</label>
-            <div className="wf-input-wrap">
+            <div className={`wf-input-wrap${setupLoading ? ' is-disabled' : ''}`}>
               <MapPin className="wf-input-icon" size={16} />
-              <select
-                id="from"
-                value={from}
-                onChange={(event) => setFrom(event.target.value)}
-                disabled={setupLoading || scanActive}
-              >
-                {nodes.map((node) => (
-                  <option key={node} value={node}>
-                    {formatNodeLabel(node)}
-                  </option>
-                ))}
-              </select>
+              <Select<NodeSelectOption, false>
+                inputId="from"
+                classNamePrefix="wf-combo"
+                options={fromSelectGroups}
+                value={fromSelected}
+                onChange={(option) => setFrom(option?.value ?? '')}
+                isDisabled={setupLoading}
+                isSearchable
+                placeholder="Choose starting point..."
+                filterOption={createFilter({ stringify: (option) => option.data.keywords })}
+                menuPortalTarget={globalThis.document?.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 30 }) }}
+                formatOptionLabel={(option) => (
+                  <div className="wf-combo-option">
+                    <span>{option.label}</span>
+                    {option.hint ? <small>{option.hint}</small> : null}
+                  </div>
+                )}
+              />
             </div>
           </div>
-
-          <div className="wf-scan-row">
-            <button
-              type="button"
-              className="wf-btn wf-btn-quiet"
-              onClick={scanActive ? stopScanner : startScanner}
-              disabled={setupLoading}
-            >
-              <QrCode size={16} />
-              {scanActive ? 'Stop Scan' : 'Scan QR'}
-            </button>
-            <p className="wf-scan-help">
-              {scanStatus || 'Scan a nearby QR to set your starting point.'}
-            </p>
-          </div>
-
-          {scanActive ? (
-            <div className="wf-scanner-box">
-              <video ref={videoRef} className="wf-scanner-video" muted playsInline />
-            </div>
-          ) : null}
 
           <div className="wf-field">
             <label htmlFor="to">To</label>
-            <div className="wf-input-wrap">
+            <div className={`wf-input-wrap${setupLoading ? ' is-disabled' : ''}`}>
               <Flag className="wf-input-icon" size={16} />
-              <select
-                id="to"
-                value={to}
-                onChange={(event) => setTo(event.target.value)}
-                disabled={setupLoading}
-              >
-                {nodes.map((node) => (
-                  <option key={node} value={node}>
-                    {formatNodeLabel(node)}
-                  </option>
-                ))}
-              </select>
+              <Select<NodeSelectOption, false>
+                inputId="to"
+                classNamePrefix="wf-combo"
+                options={toSelectGroups}
+                value={toSelected}
+                onChange={(option) => setTo(option?.value ?? '')}
+                isDisabled={setupLoading}
+                isSearchable
+                placeholder="Choose destination..."
+                filterOption={createFilter({ stringify: (option) => option.data.keywords })}
+                menuPortalTarget={globalThis.document?.body}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 30 }) }}
+                formatOptionLabel={(option) => (
+                  <div className="wf-combo-option">
+                    <span>{option.label}</span>
+                    {option.hint ? <small>{option.hint}</small> : null}
+                  </div>
+                )}
+              />
             </div>
+            <small className="wf-destination-help">
+              Technical points like escalators and corridors are hidden from
+              destinations.
+            </small>
           </div>
 
           <div className="wf-field">
@@ -572,47 +561,56 @@ function App() {
             <div className={`wf-notice ${errorTone}`}>{error}</div>
           ) : routeReady && route ? (
             <div className="wf-result">
+              {route.summary ? <p className="wf-route-summary">{route.summary}</p> : null}
               <div className="wf-summary">
                 <div className="wf-metric">
                   <span>
                     <MapPin size={12} />
                     From
                   </span>
-                  <strong>{formatNodeLabel(route.from)}</strong>
-                  <code>{route.from}</code>
+                  <strong>{routeFromLabel}</strong>
                 </div>
                 <div className="wf-metric">
                   <span>
                     <Flag size={12} />
                     To
                   </span>
-                  <strong>{formatNodeLabel(route.to)}</strong>
-                  <code>{route.to}</code>
-                </div>
-                <div className="wf-metric">
-                  <span>
-                    <Clock3 size={12} />
-                    Estimated time
-                  </span>
-                  <strong>{route.cost} min</strong>
-                  <code>
-                    <Route size={12} />
-                    {profile.replaceAll('_', ' ')}
-                    <Layers size={12} />
-                  </code>
+                  <strong>{routeToLabel}</strong>
                 </div>
               </div>
 
               <ol className="wf-path">
-                {route.path.map((node, index) => (
-                  <li key={`${node}-${index}`}>
-                    <span className="wf-step-index">{index + 1}</span>
-                    <div className="wf-step-info">
-                      <strong>{formatNodeLabel(node)}</strong>
-                      <code>{node}</code>
-                    </div>
-                  </li>
-                ))}
+                {routeInstructions.map((instruction, index) => {
+                  const Icon =
+                    routeSteps.length > 0
+                      ? edgeIconForInstruction(routeSteps, instruction)
+                      : Navigation
+
+                  return (
+                    <li
+                      key={`instruction-${instruction.fromStepIndex}-${instruction.toStepIndex}`}
+                    >
+                      <span className="wf-step-index wf-step-icon">
+                        <Icon size={14} />
+                      </span>
+                      <div className="wf-step-info">
+                        <strong>{instruction.text}</strong>
+                        {instruction.warnings.length > 0 ? (
+                          <div className="wf-step-warnings">
+                            {instruction.warnings.map((warning) => (
+                              <span
+                                key={`${index}-${warning}`}
+                                className="wf-warning-chip"
+                              >
+                                {warning}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    </li>
+                  )
+                })}
               </ol>
             </div>
           ) : (
@@ -626,6 +624,61 @@ function App() {
             </div>
           )}
         </section>
+
+        <form className="wf-card wf-ai-card" onSubmit={askAi}>
+          <div className="wf-ai-heading">
+            <span className="wf-ai-icon">
+              <MessageCircle size={16} />
+            </span>
+            <div>
+              <h2 className="wf-card-title">Ask AI</h2>
+              <p>Send a free-form question to the AI assistant.</p>
+            </div>
+          </div>
+
+          <div className="wf-chat-window">
+            <div className="wf-chat-body" ref={chatBodyRef} aria-live="polite">
+              {aiMessages.length === 0 ? (
+                <div className="wf-chat-empty">
+                  Ask a question about documents, airport process, or how to use the route form.
+                </div>
+              ) : (
+                aiMessages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`wf-chat-row ${message.role === 'user' ? 'is-user' : 'is-ai'}`}
+                  >
+                    <div className="wf-chat-bubble">{message.text}</div>
+                  </div>
+                ))
+              )}
+              {aiLoading ? (
+                <div className="wf-chat-row is-ai">
+                  <div className="wf-chat-bubble wf-chat-typing">AI is typing...</div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <label className="wf-ai-label" htmlFor="ai-message">
+            Message
+          </label>
+          <textarea
+            id="ai-message"
+            className="wf-ai-textarea"
+            value={aiMessage}
+            maxLength={2000}
+            onChange={(event) => setAiMessage(event.target.value)}
+            placeholder="Example: What should I prepare before passport control?"
+          />
+
+          <button type="submit" className="wf-btn wf-btn-primary" disabled={!canSendAiMessage}>
+            <Send size={15} />
+            {aiLoading ? 'Sending...' : 'Send Message'}
+          </button>
+
+          {aiError ? <div className="wf-notice error">{aiError}</div> : null}
+        </form>
       </section>
     </main>
   )
